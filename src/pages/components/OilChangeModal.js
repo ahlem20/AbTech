@@ -16,7 +16,7 @@ function AddOilTransaction({ closePopup }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3500/api/products/sellOil', formData);
+      const response = await axios.post('https://abtechapi.onrender.com/api/products/sellOil', formData);
       alert(response.data.message);
       closePopup();
     } catch (error) {
