@@ -1,6 +1,6 @@
 // Import necessary components and hooks
 import React, { useState, useEffect } from 'react';
-import { listAllSells, deleteTransaction, deleteAllTransactions } from '../../../services/productService';
+import { listAllSells2, deleteTransaction, deleteAllTransactions } from '../../../services/productService';
 import { AiOutlineSearch, AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
@@ -198,7 +198,7 @@ function ViewTransactions() {
   return (
     <div className="container mx-auto p-8 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-5xl font-extrabold text-center text-indigo-600 mb-12">Transaction Management</h2>
-      <Link to="/stor11"> <div className="text-5xl mb-6 text-gray-800"><IoMdArrowRoundBack /></div></Link>
+      <Link to="/stor22"> <div className="text-5xl mb-6 text-gray-800"><IoMdArrowRoundBack /></div></Link>
 
       <div className="flex justify-between items-center mb-8">
         <div className="relative w-full sm:w-1/3">
