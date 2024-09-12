@@ -1,13 +1,16 @@
 // Import necessary components and hooks
 import React, { useState, useEffect } from 'react';
-import { listAllSells2, deleteTransaction } from '../../../services/productService';
+import { listAllSells, deleteTransaction, deleteAllTransactions } from '../../../services/productService';
 import { AiOutlineSearch, AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import Modal from 'react-modal';
-
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import * as XLSX from 'xlsx'; // Import xlsx for Excel export
+import { SiMicrosoftexcel } from "react-icons/si";
+import { MdDeleteSweep } from "react-icons/md";
+
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 function ViewTransactions() {
@@ -24,7 +27,7 @@ function ViewTransactions() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await listAllSells2();
+        const response = await listAllSells();
         setTransactions(response.data);
         setSortedTransactions(response.data);
         calculateTotalProfit(response.data);
@@ -130,11 +133,18 @@ function ViewTransactions() {
     }
   };
 
-  const handleSaveEdit = async (updatedTransaction) => {
-    // Implement the API call to save the updated transaction
+  const handleDeleteAllTransactions = async () => {
     try {
-      // Assuming you have a function to update the transaction
-      // await updateTransaction(updatedTransaction);
+      await deleteAllTransactions();
+      setTransactions([]);
+      alert('All transactions deleted successfully');
+    } catch (error) {
+      alert('Error deleting all transactions');
+    }
+  };
+
+  const handleSaveEdit = async (updatedTransaction) => {
+    try {
       setTransactions(transactions.map(transaction =>
         transaction._id === updatedTransaction._id ? updatedTransaction : transaction
       ));
@@ -168,11 +178,28 @@ function ViewTransactions() {
     ],
   };
 
+  // Export to Excel function
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      sortedTransactions.map(transaction => ({
+        Date: new Date(transaction.date).toLocaleDateString(),
+        'Product Name': transaction.productId.name,
+        Quantity: transaction.quantity,
+        'Price Sell': transaction.priceSell.toFixed(2),
+        Profit: transaction.profit.toFixed(2),
+        Interest: transaction.interest.toFixed(2)
+      }))
+    );
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
+    XLSX.writeFile(wb, 'transactions.xlsx');
+  };
+
   return (
     <div className="container mx-auto p-8 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-5xl font-extrabold text-center text-indigo-600 mb-12">Transaction Management</h2>
-      <Link to="/stor22"> <div className="text-5xl  text-gray-800"><IoMdArrowRoundBack /></div></Link>
-     
+      <Link to="/stor11"> <div className="text-5xl mb-6 text-gray-800"><IoMdArrowRoundBack /></div></Link>
+
       <div className="flex justify-between items-center mb-8">
         <div className="relative w-full sm:w-1/3">
           <AiOutlineSearch className="absolute left-3 top-3 text-indigo-500" />
@@ -184,7 +211,21 @@ function ViewTransactions() {
             onChange={handleSearch}
           />
         </div>
+        <div className='flex justify-between row-6'>
+        <div
+          onClick={exportToExcel}
+          className=" text-green-500 text-5xl mr-6"
+        >
+          <SiMicrosoftexcel />
+        </div>
+        <div
+          onClick={handleDeleteAllTransactions}
+          className="text-red-500 text-5xl"
+        >
+         <MdDeleteSweep />
+        </div></div>
       </div>
+
 
       <div className='flex justify-between'>
         <div className="mb-8 text-right">
@@ -205,171 +246,63 @@ function ViewTransactions() {
         </button>
       </div>
 
-      {/* Modal for Monthly Profits & Statistics */}
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
-        contentLabel="Monthly Profits & Statistics"
-        className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto mt-24"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        contentLabel="Monthly Profits"
+        className="modal"
+        overlayClassName="modal-overlay"
       >
-        <h3 className="text-2xl font-bold text-indigo-600 mb-4">Monthly Profits</h3>
-        <Bar data={monthlyProfitData} />
-
-        <h3 className="text-2xl font-bold text-indigo-600 mt-8 mb-4">Profit vs Loss</h3>
+        <h2 className="text-2xl font-bold mb-4">Monthly Profits</h2>
         <Doughnut data={doughnutData} />
-
-        <div className="text-right mt-8">
-          <button
-            onClick={handleCloseModal}
-            className="bg-red-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-700 transition-colors"
-          >
-            Close
-          </button>
-        </div>
+        <Bar data={monthlyProfitData} />
+        <button
+          onClick={handleCloseModal}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-full mt-4"
+        >
+          Close
+        </button>
       </Modal>
 
-      <div className="overflow-x-auto shadow-lg rounded-lg">
-        <table className="min-w-full bg-white rounded-lg">
-          <thead className="bg-indigo-600 text-white">
-            <tr>
-              <th
-                onClick={() => requestSort('date')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Date {getSortIcon('date')}
-              </th>
-              <th
-                onClick={() => requestSort('productId.name')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Product Name {getSortIcon('productId.name')}
-              </th>
-              <th
-                onClick={() => requestSort('quantity')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Quantity {getSortIcon('quantity')}
-              </th>
-              <th
-                onClick={() => requestSort('priceSell')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Price Sell {getSortIcon('priceSell')}
-              </th>
-              <th
-                onClick={() => requestSort('profit')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Profit {getSortIcon('profit')}
-              </th>
-              <th
-                onClick={() => requestSort('interest')}
-                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
-              >
-                Interest {getSortIcon('interest')}
-              </th>
-              <th className="py-3 px-6 text-left text-sm font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            {sortedTransactions.length > 0 ? (
-              sortedTransactions.map((transaction) => (
-                <tr
-                  key={transaction._id}
-                  className="border-b border-gray-200 hover:bg-gray-100 transition-colors"
+      {/* Transactions Table */}
+      <table className="table-auto w-full bg-white rounded-lg shadow-lg">
+        <thead>
+          <tr className="bg-indigo-500 text-white">
+            <th className="py-3 px-6" onClick={() => requestSort('date')}>Date {getSortIcon('date')}</th>
+            <th className="py-3 px-6" onClick={() => requestSort('productId.name')}>Product Name {getSortIcon('productId.name')}</th>
+            <th className="py-3 px-6" onClick={() => requestSort('quantity')}>Quantity {getSortIcon('quantity')}</th>
+            <th className="py-3 px-6" onClick={() => requestSort('priceSell')}>Price Sell {getSortIcon('priceSell')}</th>
+            <th className="py-3 px-6" onClick={() => requestSort('profit')}>Profit {getSortIcon('profit')}</th>
+            <th className="py-3 px-6">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedTransactions.map(transaction => (
+            <tr key={transaction._id} className="border-b border-indigo-100">
+              <td className="py-4 px-6">{new Date(transaction.date).toLocaleDateString()}</td>
+              <td className="py-4 px-6">{transaction.productId.name}</td>
+              <td className="py-4 px-6">{transaction.quantity}</td>
+              <td className="py-4 px-6">${transaction.priceSell.toFixed(2)}</td>
+              <td className="py-4 px-6">${transaction.profit.toFixed(2)}</td>
+              <td className="py-4 px-6 flex space-x-4">
+                <button
+                  onClick={() => handleEditTransaction(transaction)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 transition-colors"
                 >
-                  <td className="py-4 px-6 text-sm font-medium">
-                    {new Date(transaction.date).toLocaleDateString()}
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    {transaction.productId.name}
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    {transaction.quantity}
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    ${transaction.priceSell.toFixed(2)}
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    ${transaction.profit.toFixed(2)}
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    {transaction.interest.toFixed(2)}%
-                  </td>
-                  <td className="py-4 px-6 text-sm">
-                    <button
-                      onClick={() => handleEditTransaction(transaction)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteTransaction(transaction._id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" className="py-4 px-6 text-center text-gray-500">
-                  No transactions available
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal for Editing Transaction */}
-      <Modal
-        isOpen={!!editTransaction}
-        onRequestClose={() => setEditTransaction(null)}
-        contentLabel="Edit Transaction"
-        className="bg-white rounded-lg shadow-lg p-8 max-w-lg mx-auto mt-24"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-      >
-        <h3 className="text-2xl font-bold text-indigo-600 mb-4">Edit Transaction</h3>
-        {/* Render edit form with the current transaction data */}
-        {editTransaction && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSaveEdit(editTransaction);
-            }}
-          >
-            {/* Add form fields here */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Product Name</label>
-              <input
-                type="text"
-                value={editTransaction.productId.name}
-                onChange={(e) => setEditTransaction({ ...editTransaction, productId: { ...editTransaction.productId, name: e.target.value } })}
-                className="w-full border border-gray-300 rounded-md p-2"
-              />
-            </div>
-            {/* Add other fields similarly */}
-            <div className="text-right">
-              <button
-                type="submit"
-                className="bg-indigo-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-indigo-700 transition-colors"
-              >
-                Save Changes
-              </button>
-              <button
-                type="button"
-                onClick={() => setEditTransaction(null)}
-                className="bg-red-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-700 transition-colors ml-4"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        )}
-      </Modal>
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteTransaction(transaction._id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

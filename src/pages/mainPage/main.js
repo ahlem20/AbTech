@@ -43,12 +43,7 @@ function MainPage() {
               <p className={`${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
                 This is Store 1. You can add items, manage inventory, and track sales here.
               </p>
-              <button
-                onClick={handleSellProductClick}
-                className={`mt-4 px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'} hover:bg-blue-600 transition duration-300`}
-              >
-                Sell Product
-              </button>
+              
               {showBarcodeScanner && (
                 <div className={`mt-4 p-4 rounded ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-700'}`}>
                   <p className={`${theme === 'light' ? 'text-gray-800' : 'text-gray-300'}`}>Scan Barcode:</p>

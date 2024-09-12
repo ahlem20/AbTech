@@ -9,6 +9,7 @@ export const listAllProducts = () => axios.get(`${API_URL}list`);
 export const listAllSells = () => axios.get(`${API_URL}lists1`);
 export const listAllProducts2 = () => axios.get(`${API_URL}list2`);
 export const listAllSells2 = () => axios.get(`${API_URL}lists2`);
+export const deleteAllTransactions = () => axios.delete(`${API_URL}deletetransactions`);
 export const getProduct = (productId) => {
   return axios.get(`${API_URL}product/${productId}`);
 };
