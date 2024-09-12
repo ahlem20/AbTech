@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3500/api/products/';
+const API_URL = 'https://abtechapi.onrender.com/api/products/';
 
 export const addProduct = (data) => axios.post(`${API_URL}add`, data);
 export const sellProduct = (data) => axios.post(`${API_URL}sell`, data);
