@@ -27,7 +27,7 @@ function ViewTransactions() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await listAllSells();
+        const response = await listAllSells2();
         setTransactions(response.data);
         setSortedTransactions(response.data);
         calculateTotalProfit(response.data);
