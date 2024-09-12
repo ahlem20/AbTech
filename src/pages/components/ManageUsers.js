@@ -14,7 +14,7 @@ const ManageUsers = ({ closePopup }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3500/api/users1");
+      const response = await axios.get("https://abtechapi.onrender.com/api/users1");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -27,7 +27,7 @@ const ManageUsers = ({ closePopup }) => {
 
   const handleCreateUser = async () => {
     try {
-      await axios.post("http://localhost:3500/api/users", newUser);
+      await axios.post("https://abtechapi.onrender.com/api/users", newUser);
       setNewUser({ username: "", password: "", roles: "user" });
       fetchUsers();
     } catch (error) {
@@ -42,7 +42,7 @@ const ManageUsers = ({ closePopup }) => {
 
   const handleUpdateUser = async () => {
     try {
-      await axios.put(`http://localhost:3500/api/users/${editingUser._id}`, editingUser);
+      await axios.put(`https://abtechapi.onrender.com/api/users/${editingUser._id}`, editingUser);
       setEditingUser(null);
       fetchUsers();
     } catch (error) {
@@ -52,7 +52,7 @@ const ManageUsers = ({ closePopup }) => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:3500/api/users/${userId}`);
+      await axios.delete(`https://abtechapi.onrender.com/api/users/${userId}`);
       setSelectedUser(null); // Deselect any selected user
       fetchUsers();
     } catch (error) {
