@@ -7,8 +7,8 @@ function AddOilTransaction({ closePopup }) {
     profit: 0,
     quantity: 1, 
     storname: "stor1",  // Set default quantity
-    priceSell: 1,  // Set default priceSell
-    interest: 1  // Set default interest
+    priceSell: 0,  // Set default priceSell
+    interest: 0  // Set default interest
   });
 
   const handleChange = (e) => setFormData({ ...formData, profit: e.target.value });
