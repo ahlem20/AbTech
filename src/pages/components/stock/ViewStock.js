@@ -169,7 +169,7 @@ function ViewStock() {
                     ${product.priceSell.toFixed(2)}
                   </td>
                    <td className="py-4 px-6 text-sm">
-                    ${product.description}
+                    {product.description}
                   </td>
                   <td className="py-4 px-6 text-sm">
                     ${product.priceSell - product.priceBuy}
