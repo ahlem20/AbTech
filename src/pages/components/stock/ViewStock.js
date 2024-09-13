@@ -136,7 +136,7 @@ function ViewStock() {
                 onClick={() => requestSort('description')}
                 className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
               >
-                Price Sell {getSortIcon('description')}
+                description {getSortIcon('description')}
               </th>
               <th className="py-3 px-6 text-left text-sm font-medium">
                 Interest
