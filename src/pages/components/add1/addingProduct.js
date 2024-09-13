@@ -5,6 +5,7 @@ function AddProduct({ closePopup, scannedProductId }) {
   const [formData, setFormData] = useState({
     productId: '',
     name: '',
+    description: '',
     quantity: 0,
     storname: 'stor1',
     priceBuy: 0,
@@ -100,6 +101,17 @@ function AddProduct({ closePopup, scannedProductId }) {
             name="priceSell"
             placeholder="Price Sell"
             value={formData.priceSell} // Add value
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+               <div>
+          <input
+            type="text"
+            name="description"
+            placeholder="description"
+            value={formData.description} // Add value
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
