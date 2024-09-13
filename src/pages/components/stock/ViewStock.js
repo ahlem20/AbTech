@@ -131,6 +131,12 @@ function ViewStock() {
                 className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
               >
                 Price Sell {getSortIcon('priceSell')}
+              </th>   
+                <th
+                onClick={() => requestSort('description')}
+                className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
+              >
+                Price Sell {getSortIcon('description')}
               </th>
               <th className="py-3 px-6 text-left text-sm font-medium">
                 Interest
@@ -161,6 +167,9 @@ function ViewStock() {
                   </td>
                   <td className="py-4 px-6 text-sm">
                     ${product.priceSell.toFixed(2)}
+                  </td>
+                   <td className="py-4 px-6 text-sm">
+                    ${product.description}
                   </td>
                   <td className="py-4 px-6 text-sm">
                     ${product.priceSell - product.priceBuy}
