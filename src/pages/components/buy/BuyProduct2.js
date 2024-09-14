@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BarcodeScanner from '../BarcodeScanner';
-import BuyProduct from './ProductBuyer';
+import BuyProduct from './ProductBuyer2';
 
 function ProductBuyer() {
   const [scannedProductId, setScannedProductId] = useState("");
