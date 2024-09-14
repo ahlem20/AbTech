@@ -16,7 +16,7 @@ function BuyProduct({ scannedProductId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await buyProduct(formData);
+      const response = await buyProduct2(formData);
       alert(response.data.message);
     } catch (error) {
       alert('Error buying product');
