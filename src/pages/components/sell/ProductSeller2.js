@@ -19,7 +19,7 @@ function SellProduct({ scannedProductId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await sellProduct(formData);
+      const response = await sellProduct2(formData);
       alert(response.data.message);
     } catch (error) {
       alert('Error selling product');
