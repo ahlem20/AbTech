@@ -10,7 +10,7 @@ import {
 import AddProduct from "../components/add2/AddProduct";
 import BuyProduct from "../components/buy/BuyProduct2";
 import SellProduct from "../components/sell/SellProduct2";
-import ScanBarcode from "../components/scan/ScanBarcode2";
+import ScanBarcode from "../components/scan/scanBarcode2";
 import ManageUsers from "../components/ManageUsers";
 import OilChangeModal from "../components/OilChangeModal";
 import Statistics from "../components/Statistics";
