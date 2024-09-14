@@ -20,7 +20,7 @@ function ProductScanner() {
   const handleScan = async (productId) => {
     setIsLoading(true);
     try {
-      const response = await getProduct(productId);
+      const response = await getProduct2(productId);
       const productData = response.data;
       if (productData) {
         setProduct(productData);
