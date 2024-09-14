@@ -40,7 +40,7 @@ export const PutProduct = (productId) => {
 };
 
 ///2
-export const getProduc2t = (productId) => {
+export const getProduct2 = (productId) => {
   return axios.get(`${API_URL2}product/${productId}`);
 };
 export const deleteTransaction2 = (productId) => {
