@@ -8,9 +8,9 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import AddProduct from "../components/add2/AddProduct";
-import BuyProduct from "../components/buy/BuyProduct";
-import SellProduct from "../components/sell/SellProduct";
-import ScanBarcode from "../components/scan/ScanBarcode";
+import BuyProduct from "../components/buy/BuyProduct2";
+import SellProduct from "../components/sell/SellProduct2";
+import ScanBarcode from "../components/scan/ScanBarcode2";
 import ManageUsers from "../components/ManageUsers";
 import OilChangeModal from "../components/OilChangeModal";
 import Statistics from "../components/Statistics";
