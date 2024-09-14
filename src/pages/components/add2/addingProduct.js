@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { addProduct } from '../../../services/productService';
+import { addProduct2 } from '../../../services/productService';
 
 function AddProduct({ closePopup, scannedProductId }) {
   const [formData, setFormData] = useState({
