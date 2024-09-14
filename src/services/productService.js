@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://abtechapi.onrender.com/api/products/';
 
-const API_URL2 = 'https://abtech-api2.onrender.com/';
+const API_URL2 = 'https://abtech-api2.onrender.com/api/products/';
 ///1
 export const addProduct = (data) => axios.post(`${API_URL}add`, data);
 export const sellProduct = (data) => axios.post(`${API_URL}sell`, data);
