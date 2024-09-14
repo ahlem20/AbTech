@@ -23,7 +23,7 @@ function AddProduct({ closePopup, scannedProductId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await addProduct(formData);
+      const response = await addProduct2(formData);
       alert(response.data.message);
       closePopup();
     } catch (error) {
