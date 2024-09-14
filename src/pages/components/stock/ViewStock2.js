@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { listAllProducts2 } from '../../../services/productService';
-import { AiOutlineSearch, AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
+import { listAllProducts2, deleteProduct } from '../../../services/productService';
+import { AiOutlineSearch, AiOutlineSortAscending, AiOutlineSortDescending, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 
 import {Link, useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -9,6 +9,7 @@ function ViewStock() {
   const [sortedProducts, setSortedProducts] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'productId', direction: 'ascending' });
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -63,6 +64,22 @@ function ViewStock() {
     return null;
   };
 
+  const handleEdit = (productId) => {
+    navigate(`/editProduct/${productId}`);
+  };
+
+  const handleDelete = async (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteProduct(productId);
+        setProducts(products.filter(product => product.productId !== productId));
+        alert('Product deleted successfully');
+      } catch (error) {
+        alert('Error deleting product');
+      }
+    }
+  };
+
   return (
     <div className="container mx-auto p-6">
       <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-10">Stock Management</h2>
@@ -114,8 +131,8 @@ function ViewStock() {
                 className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
               >
                 Price Sell {getSortIcon('priceSell')}
-              </th>
-                 <th
+              </th>   
+                <th
                 onClick={() => requestSort('description')}
                 className="py-3 px-6 text-left text-sm font-medium cursor-pointer hover:bg-indigo-500 transition-colors"
               >
@@ -123,6 +140,9 @@ function ViewStock() {
               </th>
               <th className="py-3 px-6 text-left text-sm font-medium">
                 Interest
+              </th>
+              <th className="py-3 px-6 text-left text-sm font-medium">
+                Actions
               </th>
             </tr>
           </thead>
@@ -147,18 +167,32 @@ function ViewStock() {
                   </td>
                   <td className="py-4 px-6 text-sm">
                     ${product.priceSell.toFixed(2)}
-                  </td> 
-                    <td className="py-4 px-6 text-sm">
-                    ${product.description}
+                  </td>
+                   <td className="py-4 px-6 text-sm">
+                    {product.description}
                   </td>
                   <td className="py-4 px-6 text-sm">
                     ${product.priceSell - product.priceBuy}
+                  </td>
+                  <td className="py-4 px-6 text-sm flex space-x-2">
+                    <button
+                      onClick={() => handleEdit(product.productId)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <AiOutlineEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product.productId)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <AiOutlineDelete />
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="py-4 px-6 text-center">
+                <td colSpan="7" className="py-4 px-6 text-center">
                   No products available
                 </td>
               </tr>
